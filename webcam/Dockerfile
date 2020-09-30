@@ -1,6 +1,6 @@
 FROM arm64v8/debian
 RUN apt update
-RUN apt install curl ca-certificates zlib1g-dev libjpeg-dev python3-opencv -y
+RUN apt install curl ca-certificates zlib1g-dev libjpeg-dev python3 python3-pip python3-opencv -y
 
 WORKDIR /usr/src/app
 COPY ./module /usr/src/app
