@@ -22,4 +22,5 @@ substitutions:
     _DOCKER_IMAGE_ID: 'edgeml-webcam'
 images:
   - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID'
+timeout: 36000s
   

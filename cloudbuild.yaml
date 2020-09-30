@@ -4,3 +4,4 @@ steps:
       id: 'build-module'
 substitutions:
     _CLOUD_BUILD_JOB_PATH: 'webcam'
+timeout: 37000s
