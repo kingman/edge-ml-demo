@@ -19,4 +19,4 @@ EXPOSE 5000
 
 ENV label="coco_labels_5.txt"
 
-CMD ["python3","coral-app.py", "--label", "$label"]
+CMD ["python3","coral-app.py", "--label", "${label}"]
