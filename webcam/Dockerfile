@@ -1,5 +1,4 @@
-
-FROM arm64v8/python:3.7
+FROM arm64v8/debian
 RUN apt update
 RUN apt install curl ca-certificates zlib1g-dev libjpeg-dev python3-opencv -y
 
