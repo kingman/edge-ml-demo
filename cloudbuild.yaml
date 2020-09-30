@@ -1,25 +1,6 @@
 steps:
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['run', '--privileged', 'linuxkit/binfmt:v0.7']
-      id: 'initialize-qemu'
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['buildx', 'create', '--name', 'mybuilder']
-      id: 'create-builder'
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['buildx', 'use', 'mybuilder']
-      id: 'select-builder'
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['buildx', 'inspect', '--bootstrap']
-      id: 'show-target-build-platforms'
-    - name: 'gcr.io/cloud-builders/docker'
-      args: ['buildx', 'build', '--platform', '$_DOCKER_BUILDX_PLATFORMS', '-t', 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID', '--push', '.']
-      id: 'build-image'
-options:
-    env:
-        - 'DOCKER_CLI_EXPERIMENTAL=enabled'
+    - name: 'gcr.io/cloud-builders/gcloud'
+      args: ['builds', 'submit', '$_CLOUD_BUILD_JOB_PATH',  '--config=$_CLOUD_BUILD_JOB_PATH/cloudbuild.yaml']
+      id: 'build-module'
 substitutions:
-    _DOCKER_BUILDX_PLATFORMS: 'linux/arm64'
-    _DOCKER_IMAGE_ID: 'edgeml-webcam'
-images:
-  - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID'
-  
+    _CLOUD_BUILD_JOB_PATH: 'inference'
