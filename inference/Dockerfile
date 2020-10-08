@@ -23,7 +23,7 @@ RUN apt-get update \
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_x86_64.whl; \
-    elsif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
         pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_aarch64.whl; \
     else \
         pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_armv7l.whl; \
