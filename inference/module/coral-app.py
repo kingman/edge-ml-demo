@@ -39,11 +39,11 @@ def predict():
         if flask.request.files.get("image"):
             image_file = flask.request.files["image"]
             image_bytes = image_file.read()
-            image = Image.open(io.BytesIO(image_bytes))
-            input = get_input_tensor(engine, image)
+            image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+            # input = get_input_tensor(engine, image)
             # Run inference.
-            predictions = engine.DetectWithImage(
-                input,
+            predictions = engine.detect_with_image(
+                image,
                 threshold=0.05,
                 keep_aspect_ratio=True,
                 relative_coord=False,
