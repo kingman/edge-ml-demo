@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.7.9-slim-buster
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -22,11 +22,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_x86_64.whl; \
+        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_x86_64.whl; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_aarch64.whl; \
+        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_aarch64.whl; \
     else \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp38-cp38-linux_armv7l.whl; \
+        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl; \
     fi
 
 WORKDIR /usr/src/app
@@ -35,6 +35,7 @@ COPY ./models /usr/src/app/models
 RUN pip3 install -r requirements.txt
 EXPOSE 5000
 
-ENV label="coco_labels_5.txt"
+ENV label="coco_labels_5.txt" 
+ENV PYTHONPATH="$PYTHONPATH:/usr/lib/python3/dist-packages:/usr/local/python3.7/dist-packages"
 
-CMD ["python3","coral-app.py", "--label", "${label}"]
+CMD python3 coral-app.py --label ${label}
