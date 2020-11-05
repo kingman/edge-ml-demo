@@ -18,7 +18,6 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update \
     && apt install -y --no-install-recommends \
     libedgetpu1-std \
-    python3-edgetpu \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
@@ -31,11 +30,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
 
 WORKDIR /usr/src/app
 COPY ./module /usr/src/app
-COPY ./models /usr/src/app/models
 RUN pip3 install -r requirements.txt
 EXPOSE 5000
 
-ENV label="coco_labels_5.txt" 
-ENV PYTHONPATH="$PYTHONPATH:/usr/lib/python3/dist-packages:/usr/local/python3.7/dist-packages"
-
-CMD python3 coral-app.py --label ${label}
+CMD python3 detection-service.py --model ${model} --labels ${labels}

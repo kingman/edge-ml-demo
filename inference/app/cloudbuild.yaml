@@ -1,0 +1,25 @@
+steps:
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['run', '--privileged', 'linuxkit/binfmt:v0.7']
+      id: 'initialize-qemu'
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['buildx', 'create', '--name', 'mybuilder']
+      id: 'create-builder'
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['buildx', 'use', 'mybuilder']
+      id: 'select-builder'
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['buildx', 'inspect', '--bootstrap']
+      id: 'show-target-build-platforms'
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['buildx', 'build', '--platform', '$_DOCKER_BUILDX_PLATFORMS', '--build-arg', 'PROJECT_ID=$PROJECT_ID', '--build-arg', 'BASE_IMAGE_ID=$_BASE_IMAGE_ID', '-t', 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID', '--push', '.']
+      id: 'build-image'
+options:
+    env:
+        - 'DOCKER_CLI_EXPERIMENTAL=enabled'
+substitutions:
+    _DOCKER_BUILDX_PLATFORMS: 'linux/amd64,linux/arm64'
+    _DOCKER_IMAGE_ID: 'edgeml-object-detection'
+    _BASE_IMAGE_ID: 'edgeml-od-base'
+images:
+  - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID'
