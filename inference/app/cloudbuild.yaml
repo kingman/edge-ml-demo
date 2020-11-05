@@ -12,7 +12,7 @@ steps:
       args: ['buildx', 'inspect', '--bootstrap']
       id: 'show-target-build-platforms'
     - name: 'gcr.io/cloud-builders/docker'
-      args: ['buildx', 'build', '--platform', '$_DOCKER_BUILDX_PLATFORMS', '--build-arg', 'PROJECT_ID=$PROJECT_ID', '--build-arg', 'BASE_IMAGE_ID=$_BASE_IMAGE_ID', '-t', 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID', '--push', '.']
+      args: ['buildx', 'build', '--platform', '$_DOCKER_BUILDX_PLATFORMS', '--build-arg', 'PROJECT_ID=$PROJECT_ID', '--build-arg', 'BASE_IMAGE_ID=$_BASE_IMAGE_ID', '-t', 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID:$COMMIT_SHA', '-t', 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID:latest', '--push', '.']
       id: 'build-image'
 options:
     env:
@@ -22,4 +22,5 @@ substitutions:
     _DOCKER_IMAGE_ID: 'edgeml-object-detection'
     _BASE_IMAGE_ID: 'edgeml-od-base'
 images:
-  - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID'
+  - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/$_DOCKER_IMAGE_ID:latest'
