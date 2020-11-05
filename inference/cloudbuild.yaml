@@ -3,5 +3,5 @@ steps:
       args: ['builds', 'submit', '$_CLOUD_BUILD_JOB_PATH',  '--config=$_CLOUD_BUILD_JOB_PATH/cloudbuild.yaml']
       id: 'build-module'
 substitutions:
-    _CLOUD_BUILD_JOB_PATH: 'app'
+    _CLOUD_BUILD_JOB_PATH: 'base'
 timeout: 37000s
