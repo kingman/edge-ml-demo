@@ -3,5 +3,5 @@ steps:
       args: ['builds', 'submit', '$_CLOUD_BUILD_JOB_PATH',  '--config=$_CLOUD_BUILD_JOB_PATH/cloudbuild.yaml', '--substitutions=COMMIT_SHA=$COMMIT_SHA']
       id: 'build-module'
 substitutions:
-    _CLOUD_BUILD_JOB_PATH: 'inference'
+    _CLOUD_BUILD_JOB_PATH: 'webcam'
 timeout: 37000s
