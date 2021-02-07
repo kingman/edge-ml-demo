@@ -17,16 +17,8 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 RUN apt-get update \
     && apt install -y --no-install-recommends \
-    libedgetpu1-std \
+    python3-pycoral \
     && rm -rf /var/lib/apt/lists/*
-
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_x86_64.whl; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_aarch64.whl; \
-    else \
-        pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl; \
-    fi
 
 WORKDIR /usr/src/app
 COPY ./module /usr/src/app
