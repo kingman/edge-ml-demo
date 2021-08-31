@@ -2,10 +2,10 @@ steps:
     - name: 'gcr.io/cloud-builders/gcloud'
       args: ['builds', 'submit', '$_BUILD_BASE_PATH',  '--config=$_BUILD_BASE_PATH/cloudbuild.yaml', '--substitutions=COMMIT_SHA=$COMMIT_SHA']
       id: 'build-base'
-    - name: 'gcr.io/cloud-builders/gcloud'
-      args: ['builds', 'submit', '$_BUILD_APP_PATH',  '--config=$_BUILD_APP_PATH/cloudbuild.yaml', '--substitutions=COMMIT_SHA=$COMMIT_SHA']
-      id: 'build-app'
+    # - name: 'gcr.io/cloud-builders/gcloud'
+    #   args: ['builds', 'submit', '$_BUILD_APP_PATH',  '--config=$_BUILD_APP_PATH/cloudbuild.yaml', '--substitutions=COMMIT_SHA=$COMMIT_SHA']
+    #   id: 'build-app'
 substitutions:
-    _BUILD_BASE_PATH: 'base'
-    _BUILD_APP_PATH: 'app'
+    _BUILD_BASE_PATH: 'classify'
+    # _BUILD_APP_PATH: 'app'
 timeout: 37000s
