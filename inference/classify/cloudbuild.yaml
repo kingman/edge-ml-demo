@@ -21,6 +21,6 @@ options:
     env:
         - 'DOCKER_CLI_EXPERIMENTAL=enabled'
 substitutions:
-    _DOCKER_BUILDX_PLATFORMS: 'linux/arm64'
-    _DOCKER_IMAGE_ID: 'edgeml-classification-base-coraltpu'
-    _BASE_IMAGE_ID: 'coral-rest-automl-arm'
+    _DOCKER_BUILDX_PLATFORMS: 'linux/amd64'
+    _DOCKER_IMAGE_ID: 'automl-classification-coraltpu-x86'
+    _BASE_IMAGE_ID: 'coral-rest-automl-x86'
