@@ -4,6 +4,7 @@ FROM gcr.io/${PROJECT_ID}/${BASE_IMAGE_ID}
 
 WORKDIR /usr/src/app
 COPY ./module/coral-app.py /usr/src/app/coral-app.py
+RUN rm /usr/src/app/models/*.tflite /usr/src/app/models/*.txt
 # FROM python:3.7.9-slim-buster
 
 # ARG TARGETPLATFORM
