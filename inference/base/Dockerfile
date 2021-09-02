@@ -23,6 +23,6 @@ RUN apt-get update \
 WORKDIR /usr/src/app
 COPY ./module /usr/src/app
 RUN pip3 install -r requirements.txt
-EXPOSE 5000
+EXPOSE 8501
 
-CMD python3 detection-service.py --model ${model} --labels ${labels}
+CMD python3 detection-service.py

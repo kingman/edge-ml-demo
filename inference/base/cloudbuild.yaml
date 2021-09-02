@@ -18,5 +18,5 @@ options:
     env:
         - 'DOCKER_CLI_EXPERIMENTAL=enabled'
 substitutions:
-    _DOCKER_BUILDX_PLATFORMS: 'linux/amd64,linux/arm64'
+    _DOCKER_BUILDX_PLATFORMS: 'linux/arm64' # add linux/amd64 when needed
     _DOCKER_IMAGE_ID: 'edgeml-od-base'

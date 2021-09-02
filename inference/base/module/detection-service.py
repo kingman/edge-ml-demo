@@ -17,11 +17,13 @@
 import argparse
 import detect
 import flask
+import glob
 import io
 import logging
 import platform
 import tflite_runtime.interpreter as tflite
 import time
+import zipfile
 
 from PIL import Image
 from PIL import ImageDraw
@@ -110,10 +112,22 @@ def load_labels(path, encoding='utf-8'):
 
 
 def init(args):
-    labels_file = args.models_directory + args.labels
-    labels = load_labels(labels_file) if labels_file else {}
+    model_pattern = args.models_directory + "*.tflite"
+    model_list = glob.glob(model_pattern)
+    if len(model_list) == 0:
+        print("\n Model not found with pattern {}".format(model_pattern))
+        sys.exit("Model not found with pattern {}".format(model_pattern))
 
-    model_file = args.models_directory + args.model
+    label_pattern = args.models_directory + "*.txt"
+    label_list = glob.glob(label_pattern)
+    if len(label_list) == 0:
+        with zipfile.ZipFile(model_list[0], 'r') as zip_ref:
+            zip_ref.extractall(args.models_directory)
+        label_list = glob.glob(label_pattern)
+
+    labels = load_labels(label_list[0]) if len(label_list) > 0 else {}
+
+    model_file = model_list[0]
     interpreter = make_interpreter(model_file)
     interpreter.allocate_tensors()
 
@@ -145,18 +159,10 @@ def main():
         help="the directory containing the model & labels files",
     )
     parser.add_argument(
-        "--model",
-        default="mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite",
-        help="Model file for inference",
-    )
-    parser.add_argument(
-        "--labels", default="coco_labels.txt", help="labels file of model"
-    )
-    parser.add_argument(
         "--threshold", default=0.4, type=float,
         help="Score threshold for detected objects."
     )
-    parser.add_argument("--port", default=5000, type=int, help="port number")
+    parser.add_argument("--port", default=8501, type=int, help="port number")
     args = parser.parse_args()
 
     init(args)
