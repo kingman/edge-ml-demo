@@ -1,6 +1,6 @@
 steps:
     - name: 'gcr.io/cloud-builders/gcloud'
-      args: ['builds', 'submit', '$_CLOUD_BUILD_JOB_PATH',  '--config=$_CLOUD_BUILD_JOB_PATH/cloudbuild.yaml', '--substitutions=COMMIT_SHA=$COMMIT_SHA']
+      args: ['builds', 'submit', '$_CLOUD_BUILD_JOB_PATH',  '--config=$_CLOUD_BUILD_JOB_PATH/cloudbuild.yaml']
       id: 'build-module'
 substitutions:
     _CLOUD_BUILD_JOB_PATH: 'inference'
