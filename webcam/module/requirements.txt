@@ -1,2 +1,5 @@
-argparse
+flask
+imutils
+numpy
+opencv-python
 requests
