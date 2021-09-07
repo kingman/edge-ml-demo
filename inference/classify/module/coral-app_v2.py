@@ -95,10 +95,10 @@ def load_labels(path, encoding='utf-8'):
         else:
             return {index: line.strip() for index, line in enumerate(lines)}
 
-def init_mqtt_client() {
+def init_mqtt_client():
     global cloud_iot
     cloud_iot = CloudIot()
-}
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Flask app exposing coral USB stick")
     parser.add_argument(
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--report_to_cloud",
-        default=False,
+        default=True,
         help="send inference result to cloud backend",
     )
     parser.add_argument("--port", default=8501, type=int, help="port number")
