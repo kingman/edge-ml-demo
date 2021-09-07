@@ -24,7 +24,7 @@ import threading
 import time
 
 logger = logging.getLogger(__name__)
-DEFAULT_CONFIG_LOCATION = '/device/config/cloud_config.ini')
+DEFAULT_CONFIG_LOCATION = '/device/config/cloud_config.ini'
 class CloudIot:
     """
     Manages a connection to Google Cloud IoT Core via MQTT, using a JWT for device
