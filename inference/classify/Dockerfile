@@ -3,8 +3,12 @@ ARG BASE_IMAGE_ID
 FROM gcr.io/${PROJECT_ID}/${BASE_IMAGE_ID}
 
 WORKDIR /usr/src/app
-COPY ./module/coral-app.py /usr/src/app/coral-app.py
+COPY ./module/coral-app_v2.py /usr/src/app/coral-app.py
+COPY ./module/core.py /usr/src/app/core.py
+COPY ./module/requirements.txt /usr/src/app/requirements.txt
 RUN rm /usr/src/app/models/*.tflite /usr/src/app/models/*.txt
+RUN pip3 install -r requirements.txt
+
 # FROM python:3.7.9-slim-buster
 
 # ARG TARGETPLATFORM
