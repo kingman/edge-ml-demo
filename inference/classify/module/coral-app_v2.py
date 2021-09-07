@@ -141,6 +141,7 @@ if __name__ == "__main__":
     print("\n Loaded engine with model : {}".format(model_file))
 
     if args.report_to_cloud: {
+        global report_to_cloud
         init_mqtt_client()
         report_to_cloud = True
     }
