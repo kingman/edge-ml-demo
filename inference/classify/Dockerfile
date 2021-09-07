@@ -7,6 +7,7 @@ COPY ./module/coral-app_v2.py /usr/src/app/coral-app.py
 COPY ./module/core.py /usr/src/app/core.py
 COPY ./module/requirements.txt /usr/src/app/requirements.txt
 RUN rm /usr/src/app/models/*.tflite /usr/src/app/models/*.txt
+RUN python3 -m pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 # FROM python:3.7.9-slim-buster
