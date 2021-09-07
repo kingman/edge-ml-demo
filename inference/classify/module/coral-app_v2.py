@@ -140,11 +140,8 @@ if __name__ == "__main__":
     engine = ClassificationEngine(model_file)
     print("\n Loaded engine with model : {}".format(model_file))
 
-    if args.report_to_cloud: {
-        global report_to_cloud
+    if args.report_to_cloud:
         init_mqtt_client()
-        report_to_cloud = True
-    }
-     
+        report_to_cloud = True     
 
     app.run(host="0.0.0.0", port=args.port)
