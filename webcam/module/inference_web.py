@@ -42,7 +42,7 @@ def classify():
 		retval, buffer = cv2.imencode('.jpg', frame)
 		
 		headers = {'accept': 'application/json'}
-		res = requests.post("http://localhost:8501/v1/vision/detection", files={'image': buffer.tobytes()}, headers=headers)
+		res = requests.post("http://mledge-deployment/v1/vision/detection", files={'image': buffer.tobytes()}, headers=headers)
 		
 		resobj = res.json()
 		
