@@ -10,6 +10,7 @@ import imutils
 import time
 import cv2
 import requests
+import os
 
 outputFrame = None
 lock = threading.Lock()
@@ -42,7 +43,7 @@ def classify():
 		retval, buffer = cv2.imencode('.jpg', frame)
 		
 		headers = {'accept': 'application/json'}
-		res = requests.post("http://mledge-deployment/v1/vision/detection", files={'image': buffer.tobytes()}, headers=headers)
+		res = requests.post(f"http://{os.environ['MLEDGE_DEPLOYMENT_SERVICE_HOST']}:{os.environ['MLEDGE_DEPLOYMENT_SERVICE_PORT']}/v1/vision/detection", files={'image': buffer.tobytes()}, headers=headers)
 		
 		resobj = res.json()
 		
