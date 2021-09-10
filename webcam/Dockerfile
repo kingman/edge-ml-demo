@@ -13,6 +13,7 @@ RUN apt-get update \
 WORKDIR /usr/src/app
 COPY ./module /usr/src/app
 COPY ./templates /usr/src/app/templates
+COPY ./static /usr/src/app/static
 RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE 8502
 

@@ -2,6 +2,9 @@ from imutils.video import VideoStream
 from flask import Response
 from flask import Flask
 from flask import render_template
+from flask import jsonify
+from flask import request
+from data_capture import DataCapture
 import logging
 import threading
 import argparse
@@ -18,10 +21,12 @@ lock = threading.Lock()
 app = Flask(__name__)
 LOGFORMAT = "%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s"
 logging.basicConfig(
-    filename=f'{__name__}.log', level=logging.DEBUG, format=LOGFORMAT)
+    filename=f'{__name__}.log', level=logging.INFO, format=LOGFORMAT)
+inference_service_url = f"http://{os.environ['MLEDGE_DEPLOYMENT_SERVICE_HOST']}:{os.environ['MLEDGE_DEPLOYMENT_SERVICE_PORT']}/v1/vision/detection"
 
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
+dataCapture = None
 
 @app.route("/")
 def index():
@@ -33,8 +38,21 @@ def video_feed():
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
 
+@app.route("/store_data", methods=['POST'])
+def store_data():
+	global dataCapture
+	threshold = request.form['threshold']
+	try:
+		if dataCapture is None:
+			dataCapture = DataCapture(threshold, getFramBytes)
+		dataCapture.setThreshold(threshold)
+		dataCapture.toggleEnabled()
+	except ValueError as ve:
+		print(ve)
+	return jsonify({'threshold': dataCapture.getThreshold(), 'enabled': dataCapture.isEnabled()})
+
 def classify():
-	global vs, outputFrame, lock
+	global vs, outputFrame, lock, inference_service_url, dataCapture
 
 	while True:
 		frame = vs.read()
@@ -43,13 +61,16 @@ def classify():
 		retval, buffer = cv2.imencode('.jpg', frame)
 		
 		headers = {'accept': 'application/json'}
-		res = requests.post(f"http://{os.environ['MLEDGE_DEPLOYMENT_SERVICE_HOST']}:{os.environ['MLEDGE_DEPLOYMENT_SERVICE_PORT']}/v1/vision/detection", files={'image': buffer.tobytes()}, headers=headers)
+		res = requests.post(inference_service_url, files={'image': buffer.tobytes()}, headers=headers)
 		
 		resobj = res.json()
 		
 		if resobj['success']:
 			cv2.putText(frame, f"{resobj['predictions'][0]['label']}: {resobj['predictions'][0]['score']}",
-			(10, frame.shape[0] - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
+			(10, frame.shape[0] - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+			if dataCapture and dataCapture.isEligibleForCapture(resobj['predictions'][0]['score']):
+				captureEntry = {'frame': frame.copy(), 'prediction': resobj, 'ts':time.time()}
+				dataCapture.put(captureEntry)
 		
 		with lock:
 			outputFrame = frame.copy()
@@ -68,7 +89,9 @@ def generate():
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
 			bytearray(encodedImage) + b'\r\n')
 
-
+def getFramBytes(task):
+	(flag, buffer) = cv2.imencode(".jpg", task['frame'])
+	return buffer.tobytes()
 
 def main():
     parser = argparse.ArgumentParser(

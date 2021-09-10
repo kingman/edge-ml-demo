@@ -3,3 +3,4 @@ imutils
 numpy
 opencv-python
 requests
+google-cloud-storage

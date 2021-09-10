@@ -1,9 +1,20 @@
 <html>
   <head>
     <title>AutoML Classification</title>
+    <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+    <script src="{{url_for('static', filename='form.js')}}"></script>
   </head>
   <body>
     <h1>Video stream classification</h1>
     <img src="{{ url_for('video_feed') }}">
+
+    <form>
+      <div>
+        <label for="threshold">Threshold value</label>
+        <input type="test" id="threshold" placeholder="value">
+      </div>
+      <button type="submit">Enable Storage</button>
+    </form>
+    <div id="storeInfo" style="display:none;"></div>
   </body>
 </html>
