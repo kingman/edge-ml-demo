@@ -1,5 +1,5 @@
 from google.cloud import storage
-from iot-core import CloudIot
+from iot_core import CloudIot
 import logging
 import os
 import queue
