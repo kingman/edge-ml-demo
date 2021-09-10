@@ -1,4 +1,5 @@
 from google.cloud import storage
+from iot-core import CloudIot
 import logging
 import os
 import queue
@@ -10,7 +11,7 @@ logging.basicConfig(
     filename=f'{__name__}.log', level=logging.INFO, format=LOGFORMAT)
 
 class DataCapture:
-    def __init__(self, threshold, customExtractBytes):
+    def __init__(self, threshold, customExtractBytes, getMessageToUpload):
         try:
             self._threshold = float(threshold)
         except ValueError:
@@ -21,13 +22,17 @@ class DataCapture:
             raise ValueError('Environment variable GCS_UPLOAD_BUCKET not set')
         if customExtractBytes is None:
             raise ValueError('Missing bytes extraction callback.')
-        
         self._customExtractBytes = customExtractBytes
+        if getMessageToUpload is None:
+            raise ValueError('Missing create message callback.')
+        self._getMessageToUpload = getMessageToUpload
+
         
         self._enabled = False
         self._queue = queue.Queue()
         storage_client = storage.Client()
         self._bucket = storage_client.bucket(bucket_name)
+        self._iotCore = CloudIot()
         self._thread = None
     
     def toggleEnabled(self):
@@ -66,5 +71,6 @@ class DataCapture:
                 dataToSend = self._customExtractBytes(task)
                 self._bucket.blob(file_name).upload_from_string(dataToSend)
                 fileUrl = self._bucket.blob(file_name).public_url
-                print(fileUrl)
+                message = self._getMessageToUpload(fileUrl)
+                self._iotCore.publish_message(message)
                 self._queue.task_done()        

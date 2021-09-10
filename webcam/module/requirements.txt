@@ -4,3 +4,6 @@ numpy
 opencv-python
 requests
 google-cloud-storage
+cryptography==3.4.8
+pyjwt==2.1.0
+paho-mqtt==1.5.1

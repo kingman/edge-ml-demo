@@ -44,7 +44,7 @@ def store_data():
 	threshold = request.form['threshold']
 	try:
 		if dataCapture is None:
-			dataCapture = DataCapture(threshold, getFramBytes)
+			dataCapture = DataCapture(threshold, getFramBytes, generateInferenceResultMessage)
 		dataCapture.setThreshold(threshold)
 		dataCapture.toggleEnabled()
 	except ValueError as ve:
@@ -69,7 +69,7 @@ def classify():
 			cv2.putText(frame, f"{resobj['predictions'][0]['label']}: {resobj['predictions'][0]['score']}",
 			(10, frame.shape[0] - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 			if dataCapture and dataCapture.isEligibleForCapture(resobj['predictions'][0]['score']):
-				captureEntry = {'frame': frame.copy(), 'prediction': resobj, 'ts':time.time()}
+				captureEntry = {'frame': frame.copy(), 'predictions': resobj['predictions'], 'ts':time.time()}
 				dataCapture.put(captureEntry)
 		
 		with lock:
@@ -92,6 +92,9 @@ def generate():
 def getFramBytes(task):
 	(flag, buffer) = cv2.imencode(".jpg", task['frame'])
 	return buffer.tobytes()
+
+def generateInferenceResultMessage(task, fileUrl):
+	return {'predictions': task['predictions'], 'ts': task['ts'], 'fileUrl': fileUrl}
 
 def main():
     parser = argparse.ArgumentParser(

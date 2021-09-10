@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import threading
 import time
 
 logger = logging.getLogger(__name__)
-DEFAULT_CONFIG_LOCATION = '/device/config/cloud_config.ini'
 class CloudIot:
     """
     Manages a connection to Google Cloud IoT Core via MQTT, using a JWT for device
@@ -32,15 +31,14 @@ class CloudIot:
     You must configure a connection by specifying a Clout IoT configuration file (.ini). Then
     you can use :meth:`publish_message` to send an arbitrary message to your cloud project.
     """
-    def __init__(self, config_file=DEFAULT_CONFIG_LOCATION, config_section='DEFAULT'):
+    def __init__(self, config_section='DEFAULT'):
         """
         Args:
-            config_file (str): Path to your Cloud IoT configuration file (.ini).
             config_section (str): The section name in the .ini file where the Cloud IoT Core config
                 can be read. By default, it reads from the "[DEFAULT]" section.
         """
         self._config = configparser.ConfigParser()
-        if not self._config.read(config_file):
+        if not self._config.read(os.environ['CLOUD_IOT_CONFIG']):
             logger.warning('No valid config provided (reading %s).\nCloud IoT is disabled.' % config_file)
             self._enabled = False
             return
