@@ -71,6 +71,6 @@ class DataCapture:
                 dataToSend = self._customExtractBytes(task)
                 self._bucket.blob(file_name).upload_from_string(dataToSend)
                 fileUrl = self._bucket.blob(file_name).public_url
-                message = self._getMessageToUpload(fileUrl)
+                message = self._getMessageToUpload(task, fileUrl)
                 self._iotCore.publish_message(message)
                 self._queue.task_done()        
