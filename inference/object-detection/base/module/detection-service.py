@@ -20,20 +20,12 @@ import flask
 import glob
 import io
 import logging
-import platform
 import tflite_runtime.interpreter as tflite
 import time
 import zipfile
 
 from PIL import Image
 from PIL import ImageDraw
-
-
-EDGETPU_SHARED_LIB = {
-  'Linux': 'libedgetpu.so.1',
-  'Darwin': 'libedgetpu.1.dylib',
-  'Windows': 'edgetpu.dll'
-}[platform.system()]
 
 app = flask.Flask(__name__)
 LOGFORMAT = "%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s"
@@ -139,14 +131,7 @@ def init(args):
 
 def make_interpreter(model_file):
     model_file, *device = model_file.split('@')
-    return tflite.Interpreter(
-        model_path=model_file,
-        experimental_delegates=[
-            tflite.load_delegate(
-                EDGETPU_SHARED_LIB,
-                {'device': device[0]} if device else {}
-            )
-        ])
+    return tflite.Interpreter(model_path=model_file)
 
 
 def main():

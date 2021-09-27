@@ -17,12 +17,16 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 RUN apt-get update \
     && apt install -y --no-install-recommends \
-    python3-pycoral \
+    python3-tflite-runtime \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
-COPY ./module /usr/src/app
+COPY ./base/module /usr/src/app
+COPY ./base/models /usr/src/app/models
 RUN pip3 install -r requirements.txt
 EXPOSE 8501
+
+ENV model="mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite"
+ENV labels="coco_labels.txt"
 
 CMD python3 detection-service.py
