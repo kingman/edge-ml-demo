@@ -28,5 +28,5 @@ EXPOSE 8501
 
 ENV model="mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite"
 ENV labels="coco_labels.txt"
-
+ENV PYTHONPATH="$PYTHONPATH:/usr/lib/python3/dist-packages:/usr/local/python3.7/dist-packages"
 CMD python3 detection-service.py
