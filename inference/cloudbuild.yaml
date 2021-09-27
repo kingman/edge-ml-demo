@@ -6,6 +6,6 @@ steps:
     #   args: ['builds', 'submit', '$_BUILD_APP_PATH',  '--config=$_BUILD_APP_PATH/cloudbuild.yaml']
     #   id: 'build-app'
 substitutions:
-    _BUILD_BASE_PATH: 'classify'
+    _BUILD_BASE_PATH: 'object-detection'
     # _BUILD_APP_PATH: 'app'
 timeout: 37000s
