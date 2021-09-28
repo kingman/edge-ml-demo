@@ -19,6 +19,6 @@ options:
         - 'DOCKER_CLI_EXPERIMENTAL=enabled'
 substitutions:
     _DOCKER_BUILDX_PLATFORMS: 'linux/arm64'
-    _DOCKER_IMAGE_ID: 'automl-edgeml-web-ui-arm64'
+    _DOCKER_IMAGE_ID: 'object-detection-web-ui-arm64'
 timeout: 36000s
   
