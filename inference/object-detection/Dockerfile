@@ -26,7 +26,7 @@ COPY ./base/models /usr/src/app/models
 RUN pip3 install -r requirements.txt
 EXPOSE 8501
 
-ENV model="mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite"
+ENV model="ssd_mobilenet_v1_1_metadata_1.tflite"
 ENV labels="coco_labels.txt"
 ENV PYTHONPATH="$PYTHONPATH:/usr/lib/python3/dist-packages:/usr/local/python3.7/dist-packages"
 CMD python3 detection-service.py
