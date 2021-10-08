@@ -78,7 +78,7 @@ def classify():
 
                 cv2.putText(frame, f"{resobj['predictions'][0]['label']}: {resobj['predictions'][0]['confidence']}",
                 (10, frame.shape[0] - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                if dataCapture and dataCapture.isEligibleForCapture(resobj['predictions'][0]['score']):
+                if dataCapture and dataCapture.isEligibleForCapture(resobj['predictions'][0]['confidence']):
                     captureEntry = {'frame': frame.copy(), 'predictions': resobj['predictions'], 'ts':time.time()}
                     dataCapture.put(captureEntry)
             
